@@ -11,14 +11,49 @@
 
 using namespace std;
 
-int KP_FileIO::getFileContents(const std::string &filename, std::string &contents)
-{
-	//TODO fill in
+//trys to open filename, and return its contents in contents
+//it will strip out only \n's (char return\line feed)
+//returns:
+//SUCCESS all worked, contents string contains all in the file
+//COULD_NOT_OPEN_FILE_TO_READ contents string is cleared
+int KP_FileIO::getFileContents(const std::string &filename,
+		std::string &contents) {
+	std::ifstream myfile;
+	myfile.open(filename.c_str());
+	if (myfile.fail()) {
+		contents.clear();
+		return COULD_NOT_OPEN_FILE_TO_READ;
+	}
+
+	std::string line;
+//	while (myfile.peek() != std::ifstream::traits_type::eof()) {
+//		getline(myfile, line);
+//		contents += line;
+//	}
+	myfile.clear();
+	myfile.seekg(0, ios::beg);
+	myfile.close();
+	return SUCCESS;
 }
 
-int KP_FileIO::writeVectortoFile(const std::string filename,std::vector<std::string> &myEntryVector)
-{
+//trys to open filename, and serialize  myEntryVector contents to it
+//returns:
+//SUCCESS all worked, filename contains myEntryVector strings
+//COULD_NOT_OPEN_FILE_TO_WRITE
+int KP_FileIO::writeVectortoFile(const std::string filename,
+		std::vector<std::string> &myEntryVector) {
 	//TODO fill in
-}
+	std::ofstream myfile;
+	myfile.open(filename.c_str());
+	if (myfile.fail()) {
+		return COULD_NOT_OPEN_FILE_TO_WRITE;
+	}
 
+	int length = myEntryVector.size();
+	for (int i = 0; i < length; i++) {
+		myfile << myEntryVector[i] << std::endl;
+	}
+	myfile.close();
+	return SUCCESS;
+}
 
